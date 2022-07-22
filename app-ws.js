@@ -19,7 +19,7 @@ function onMessage(wss, ws, data) {
 }
 
 function addPlayer(client, data){
-	if(data['action'] === 'ALLY_INVOCATION') {
+	if(data['action'] === 'ENEMY_INVOCATION') {
 		playersOn.push({
 			"client": client,
 			"id": data['id']
