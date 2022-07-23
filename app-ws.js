@@ -25,7 +25,7 @@ function addPlayer(ws, client, data){
 			"id": data['id'],
 			"position": data['position'],
 			"direction": data['direction'],
-W		});
+		});
 	}
 }
 
