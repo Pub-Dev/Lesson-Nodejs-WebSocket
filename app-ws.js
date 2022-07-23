@@ -10,7 +10,7 @@ function onMessage(wss, ws, data) {
 	var obj = JSON.parse(data.toString());
 	wss.clients.forEach(function each(client){
 		if(client === ws && client.readyState === WebSocket.OPEN){
-			addPlayer(client, obj);
+			addPlayer(ws, client, obj);
 		}
 		if(client !== ws && client.readyState === WebSocket.OPEN){			
 			client.send(JSON.stringify(obj));
@@ -18,12 +18,24 @@ function onMessage(wss, ws, data) {
 	});
 }
 
-function addPlayer(client, data){
+function addPlayer(ws, client, data){
 	if(data['action'] === 'ENEMY_INVOCATION') {
 		playersOn.push({
 			"client": client,
-			"id": data['id']
-		})
+			"id": data['id'],
+			"position": data['position'],
+			"direction": data['direction'],
+		});
+		playersOn.forEach(function playersOnMethod(player){
+			if(ws !== player.client){
+				player.client.send(JSON.stringify({
+					"id": player.id,
+					"action": "PREVIOUSLY_CONNECTED",
+					"direction": player.direction,
+					"position": player.position,
+				}));
+			}
+		});
 	}
 }
 
@@ -63,7 +75,7 @@ function onConnection(wss, ws, req) {
 	ws.on('close', function close() { 
 		onDisconnect(wss, ws);
 	});
-	
+
 	console.log('onConnection');
 }
 
