@@ -12,7 +12,7 @@ function onMessage(wss, ws, data) {
 		if(client === ws && client.readyState === WebSocket.OPEN){
 			addPlayer(ws, client, obj);
 		}
-		if(client !== ws && client.readyState === WebSocket.OPEN){			
+		if(client !== ws && client.readyState === WebSocket.OPEN){		
 			client.send(JSON.stringify(obj));
 		}
 	});
@@ -25,17 +25,7 @@ function addPlayer(ws, client, data){
 			"id": data['id'],
 			"position": data['position'],
 			"direction": data['direction'],
-		});
-		playersOn.forEach(function playersOnMethod(player){
-			if(ws !== player.client){
-				player.client.send(JSON.stringify({
-					"id": player.id,
-					"action": "PREVIOUSLY_CONNECTED",
-					"direction": player.direction,
-					"position": player.position,
-				}));
-			}
-		});
+W		});
 	}
 }
 
